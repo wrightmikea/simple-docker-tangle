@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>sdt</title>
-<!-- 2016-01-02 Sat 08:54 -->
+<!-- 2016-01-02 Sat 10:02 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Michael Wright" />
@@ -280,13 +280,18 @@ CMD bash
 <div class="outline-text-4" id="text-1-3-2">
 <div class="org-src-container">
 
-<pre class="src src-sh" id="build-image">docker build -t dockertangle build
+<pre class="src src-sh" id="build-image">cat build/Dockerfile
+echo "---"
+docker build -t dockertangle build
 </pre>
 </div>
 <p>
 produces:
 </p>
 <pre class="example">
+FROM ubuntu
+CMD bash
+---
 Sending build context to Docker daemon 2.048 kBSending build context to Docker daemon 2.048 kB
 Step 1 : FROM ubuntu
 89d5d8e8bafb
@@ -329,7 +334,7 @@ mwright@SV-LT-1080:~/github/wrightmikea/simple-docker-tangle[master]$ elephant
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Michael Wright</p>
-<p class="date">Created: 2016-01-02 Sat 08:54</p>
+<p class="date">Created: 2016-01-02 Sat 10:02</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

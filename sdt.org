@@ -65,25 +65,32 @@ For more examples and ideas, visit:
 *** Generate a simple Dockerfile (Ubuntu bash) in the build directory
 # C-c C-v t 
 #+name: generate-dockerfile
-#+BEGIN_SRC dockerfile :exports source :tangle build/Dockerfile
-  FROM ubuntu
-  CMD bash
+#+BEGIN_SRC dockerfile :exports code :padline no :tangle build/Dockerfile
+FROM ubuntu
+CMD bash
 #+END_SRC
 
 *** Build the docker image and tag it
 #+name: build-image
-#+BEGIN_SRC sh :exports both :results output verbatim replace :session docker
+#+BEGIN_SRC sh :exports both :padline no :results output verbatim replace :session docker
+cat build/Dockerfile
+echo "---"
 docker build -t dockertangle build
 #+END_SRC
 produces:
 #+RESULTS: build-image
-: Sending build context to Docker daemon 2.048 kBSending build context to Docker daemon 2.048 kB
-: Step 1 : FROM ubuntu
-: 89d5d8e8bafb
-: Step 2 : CMD bash
-: Using cache
-: e09d070f829f
-: Successfully built e09d070f829f
+#+begin_example
+FROM ubuntu
+CMD bash
+---
+Sending build context to Docker daemon 2.048 kBSending build context to Docker daemon 2.048 kB
+Step 1 : FROM ubuntu
+89d5d8e8bafb
+Step 2 : CMD bash
+Using cache
+e09d070f829f
+Successfully built e09d070f829f
+#+end_example
 
 ** Run the created docker image
 *** Run a command that uses the shared data
