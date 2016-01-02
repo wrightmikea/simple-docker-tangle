@@ -16,3 +16,7 @@ To regenerate the .html file
 
 * Edit the sdt.org file
 * Export to html (C-c C-e h o and then respond yes to prompts)
+
+Sample exported .html
+===
+Browse [sample output](http://wrightmikea.github.io/simple-docker-tangle.html "exported html")
