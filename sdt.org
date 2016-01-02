@@ -1,0 +1,104 @@
+* Simple Docker Tangle
+** Overview
+Create a shell session to set up docker environment.
+Create directories to be shared with Docker
+Tangle a Dockerfile
+Use docker shell session to run docker build.
+Use docker shell session to run a command in the built container.
+** Setup
+*** set docker environement variables; create test data in to-be-shared directory
+#+name: setup
+#+BEGIN_SRC sh :exports source :results output verbatim :session docker
+eval "$(docker-machine env default)"
+mkdir build
+mkdir shared
+echo "elephant" > shared/cairo.txt # place a known elephant in Cairo
+ls -ltr shared
+#+END_SRC
+*** test data created
+#+RESULTS: setup
+: 
+: mkdir: build: File exists
+: mkdir: shared: File exists
+: mwright@SV-LT-1080:~/github/wrightmikea/simple-docker-tangle[master]$ total 8
+: -rw-r--r--  1 mwright  staff  9 Jan  2 08:51 cairo.txt
+
+*** verify docker is working
+#+name: verify-docker
+#+BEGIN_SRC sh :exports both :results output verbatim replace :session docker
+echo "show docker env"
+env | grep DOC
+docker run hello-world
+echo "\n"
+#+END_SRC
+*** docker verification output
+#+RESULTS: verify-docker
+#+begin_example
+show docker env
+DOCKER_HOST=tcp://192.168.99.100:2376
+DOCKER_MACHINE_NAME=default
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/mwright/.docker/machine/machines/default
+Hello from Docker.
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/userguide/
+\n
+#+end_example
+
+** Create a docker image
+*** Generate a simple Dockerfile (Ubuntu bash) in the build directory
+# C-c C-v t 
+#+name: generate-dockerfile
+#+BEGIN_SRC dockerfile :exports source :tangle build/Dockerfile
+  FROM ubuntu
+  CMD bash
+#+END_SRC
+
+*** Build the docker image and tag it
+#+name: build-image
+#+BEGIN_SRC sh :exports both :results output verbatim replace :session docker
+docker build -t dockertangle build
+#+END_SRC
+produces:
+#+RESULTS: build-image
+: Sending build context to Docker daemon 2.048 kBSending build context to Docker daemon 2.048 kB
+: Step 1 : FROM ubuntu
+: 89d5d8e8bafb
+: Step 2 : CMD bash
+: Using cache
+: e09d070f829f
+: Successfully built e09d070f829f
+
+** Run the created docker image
+*** Run a command that uses the shared data
+#+name: run-image
+#+BEGIN_SRC sh :exports both :results output verbatim replace :session docker
+echo "PWD=${PWD}"
+echo "ls shared=$(ls shared)"
+#ls -ltr "${PWD}/shared"
+docker run -it -v ${PWD}/shared:/opt/shared dockertangle find /opt/shared -name "*.txt" -exec grep elephant {} \; -print
+#+END_SRC
+produces:
+#+RESULTS: run-image
+: PWD=/Users/mwright/github/wrightmikea/simple-docker-tangle
+: ls shared=cairo.txt
+: mwright@SV-LT-1080:~/github/wrightmikea/simple-docker-tangle[master]$ elephant
+: /opt/shared/cairo.txt
+
+
