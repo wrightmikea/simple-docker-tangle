@@ -20,3 +20,15 @@ To regenerate the .html file
 Sample exported .html
 ===
 Browse [sample output](http://wrightmikea.github.io/simple-docker-tangle.html "exported html")
+
+Notes
+===
+* Mac OS X
+* Docker Toolkit
+* Emacs 24.5.1
+* ~/.emacs/init.el customizations
+
+>     (org-babel-do-load-languages
+>       'org-babel-load-languages
+>        '((sh . t)
+>         ))
